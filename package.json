@@ -1,0 +1,49 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Tumulus API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node ./server.js",
+    "start:dev": "nodemon ./server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TumulusSoftware/API.git"
+  },
+  "author": "Ocean Tiong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TumulusSoftware/API/issues"
+  },
+  "homepage": "https://github.com/TumulusSoftware/API#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-fileupload": "^1.4.0",
+    "express-jwt": "^6.0.0",
+    "form-data": "^4.0.0",
+    "http": "^0.0.1-security",
+    "https": "^1.0.0",
+    "joi": "^17.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.1.0",
+    "node-cron": "^3.0.2",
+    "node-fetch": "^2.6.7",
+    "rolia-util": "^1.0.2",
+    "rootpath": "^0.1.2",
+    "sequelize": "^6.3.4",
+    "tumulus-crypto": "^1.0.1",
+    "uuid": "^8.3.2",
+    "web3": "^1.7.4",
+    "web3.storage": "^4.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "sequelize-cli": "^6.4.1"
+  }
+}
