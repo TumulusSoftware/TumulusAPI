@@ -84,5 +84,6 @@ async function writeTx(objMethod, errorHandler) {
 			errorHandler && errorHandler();
 			txSending.done = true;
 		});
-	await waitFor(txSending);
+	// await waitFor(txSending);
+	return {status: "PENDING"};
 };

@@ -8,19 +8,13 @@ const {
 module.exports = {
 	getAuthorizationsByOwner,
 	getAuthorizationsByViewer,
-	getAssetData,
 	getAuthorizedAssetData,
+	getAssetData,
 	getAgreementsByOwner,
 	getAgreementsByAnnouncer,
 	getStates,
-	isInState,
 };
 
-async function isInState(owner, bit) {
-	const result = await contract.methods.isInState(owner, bit).call(callOptions);
-	// returns(bool) 
-	return result;
-}
 async function getAuthorizationsByOwner(owner) {
 	const result = await contract.methods.getAuthorizationsByOwner(owner).call(callOptions);
 	// returns(Authorization[] _rtn) 
@@ -31,14 +25,14 @@ async function getAuthorizationsByViewer(viewer) {
 	// returns(Authorization[] _rtn) 
 	return result;
 }
-async function getAssetData(id, owner) {
-	const result = await contract.methods.getAssetData(id, owner).call(callOptions);
-	return web3.utils.hexToAscii(result);
-}
 async function getAuthorizedAssetData(id, viewer) {
 	const result = await contract.methods.getAuthorizedAssetData(id, viewer).call(callOptions);
 	// returns(bytes _rtn) 
 	return result;
+}
+async function getAssetData(id, owner) {
+	const result = await contract.methods.getAssetData(id, owner).call(callOptions);
+	return web3.utils.hexToAscii(result);
 }
 async function getAgreementsByOwner(owner) {
 	const result = await contract.methods.getAgreementsByOwner(owner).call(callOptions);

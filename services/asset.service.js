@@ -13,6 +13,7 @@ module.exports = {
     setAssetId,
     getByOwner,
     list,
+    retrieve,
 };
 
 async function retrieve(cid) {
