@@ -1,7 +1,4 @@
-const {
-	web3,
-	contract,
-} = require("_helpers/bc");
+const Web3 = require("web3");
 
 module.exports = {
 	listenToEvents
@@ -22,6 +19,10 @@ function processEvents(data) {
 	}
 }
 function listenToEvents() {
+	var web3 = new Web3(process.env.RPC_WS_URL);
+	const contractABI = require("_config/Datasitter-abi.json");
+	const contractAddress = process.env.CONTRACT_ADDRESS;
+	const contract = new web3.eth.Contract(contractABI, contractAddress);
 	contract.events.allEvents()
 		.on('data', data=>{
 			console.log("### listenToEvents, data:");

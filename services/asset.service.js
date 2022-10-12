@@ -1,12 +1,16 @@
-﻿const fs = require('fs');
+﻿const {
+	web3,
+	writeTx,
+	contract,
+	callOptions,
+} = require("_helpers/bc");
+const fs = require('fs');
 const { waitFor } = require("rolia-util");
 const path = require('path');
 const { Web3Storage, getFilesFromPath } = require(`web3.storage`);
 const { hybridEncryptFile, hybridDecryptFile } = require('tumulus-crypto');
 const config = require('_config/config');
 const db = require('_helpers/db');
-const bcw = require('_helpers/bcw'); // blockchain writer
-const bcr = require('_helpers/bcr'); // blockchain reader
 
 module.exports = {
     store,
@@ -20,17 +24,19 @@ async function retrieve(cid) {
     const salt = process.env.SALT;
     const tmlPrivateKey = config.getTumulusPrivateKey();
 
-    const {hybridFilePath, fileName} = await retrieveFromWeb3Storage(cid);
-    const tmpDir  = config.getTmpDir();
+    const { hybridFilePath, fileName } = await retrieveFromWeb3Storage(cid);
+    const tmpDir = config.getTmpDir();
     const decryptedPath = await hybridDecryptFile(hybridFilePath, tmpDir, tmlPrivateKey, salt);
     fs.rmSync(hybridFilePath);
 
-    return {filePath:decryptedPath, fileName:fileName};
+    return { filePath: decryptedPath, fileName: fileName };
 }
 
-async function getByOwner(assetId, ownerAddress) {
-    const cid = await bcr.getAssetData(assetId, ownerAddress);
+async function getByOwner(id, owner) {
+    const result = await contract.methods.getAssetData(id, owner).call(callOptions);
+    const cid = web3.utils.hexToAscii(result);
     return await retrieve(cid);
+
 }
 
 async function list(ownerId) {
@@ -38,7 +44,7 @@ async function list(ownerId) {
     return await db.Asset.findAll({ where: { UserId: ownerId } });
 }
 
-async function store(assetId, fileName, tempFilePath, tags, ownerAddress, ownerId) {
+async function store(assetId, fileName, tempFilePath, tags, owner, ownerId) {
     var asset;
     if (assetId == 0) {
         asset = await db.Asset.create({ fileName: fileName, tags: tags, UserId: ownerId, status: "NEW" });
@@ -56,8 +62,9 @@ async function store(assetId, fileName, tempFilePath, tags, ownerAddress, ownerI
         await asset.save();
     };
 
-    bcw.saveAsset(assetId, ownerAddress, asset.sno, cid, errorHandler);
-    return { status: "PENDING" };
+    const hexCid = web3.utils.asciiToHex(cid);
+    const objMethod = contract.methods.saveAsset(assetId, owner, asset.sno, hexCid);
+    return writeTx(objMethod, errorHandler);
 }
 
 async function retrieveFromWeb3Storage(cid) {
@@ -89,7 +96,7 @@ async function retrieveFromWeb3Storage(cid) {
     output.end();
     await waitFor(writing);
 
-    return {hybridFilePath, fileName} ;
+    return { hybridFilePath, fileName };
 }
 
 async function storeToWeb3Storage(fileName, tempFilePath) {

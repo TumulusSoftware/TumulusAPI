@@ -19,13 +19,13 @@ async function initialize() {
 
 	// connect to db
 	const sequelize = new Sequelize(database, user, password, {
+		host: host,
 		dialect: "mysql",
 		// disable logging; default: console.log
 		logging: false,
 		define: {
 			freezeTableName: true
 		}
-
 	});
 
 	// init models and add them to the exported db object

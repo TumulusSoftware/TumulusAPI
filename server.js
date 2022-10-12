@@ -12,11 +12,11 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // api routes
-app.use("/asset", require("controllers/asset.controller"));
 app.use("/user", require("controllers/user.controller"));
-// app.use("/agreement", require("./controllers/agreement.controller"));
-// app.use("/state", require("./controllers/state.controller"));
-// app.use("/view", require("./controllers/view.controller"));
+app.use("/agreement", require("controllers/agreement.controller"));
+app.use("/view", require("controllers/view.controller"));
+app.use("/state", require("controllers/state.controller"));
+app.use("/asset", require("controllers/asset.controller"));
 
 // global error handler
 app.use(errorHandler);

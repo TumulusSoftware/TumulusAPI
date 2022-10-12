@@ -14,8 +14,8 @@ router.use(fileUpload({
 
 // routes
 router.post('/upload', authorize(), upload    );
-router.get ('/:id'   , authorize(), getByOwner);
 router.get ('/list'  , authorize(), list      );
+router.get ('/:id'   , authorize(), getByOwner);
 module.exports = router;
 
 function list(req, res, next) {
