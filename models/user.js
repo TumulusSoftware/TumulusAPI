@@ -24,6 +24,7 @@ function model(sequelize) {
     scopes: {
       // include hash with this scope
       withHash: { attributes: {} },
+      emailOnly: { attributes: {exclude: ["vcode", "walletAddress", "safeKey", "publicKey", "privateKey", "status", "hash"]}}
     },
   };
 

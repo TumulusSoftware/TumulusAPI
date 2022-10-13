@@ -60,13 +60,12 @@ async function writeTx(objMethod, errorHandler) {
 		walletKey
 	);
 
-	const funcLabel = "### " + objMethod._method.name + "(): " + JSON.stringify(objMethod.arguments);
+	const funcLabel = objMethod._method.name + "(): " + JSON.stringify(objMethod.arguments);
 
 	var txSending = { done: false };
 	web3.eth.sendSignedTransaction(signedTx.rawTransaction)
 		.on('confirmation', (confirmationNumber, receipt) => {
-			console.log(funcLabel, "confirmation:");
-			console.log(confirmationNumber);
+			console.log(`### Confirmation: #${confirmationNumber} ${funcLabel}`);
 			console.log(receipt);
 			txLog.status = "OK";
 			txLog.gasUsed = receipt.gasUsed;
@@ -74,12 +73,13 @@ async function writeTx(objMethod, errorHandler) {
 			txLog.save();
 			txSending.done = true;
 		})
-		.on('error', (error, receipt) => {
+		.on('error', async (error, receipt) => {
 			// If a out of gas error, the second parameter is the receipt.
-			console.log(funcLabel, "error:");
-			console.log(error);
-			console.log(receipt);
-			txLog.status = "FAILED";
+			const reason = await getRevertReason(receipt.transactionHash);
+			console.error(`### Error: ${funcLabel}`);
+			console.error(`REASON: ${reason}`);
+			console.error(error);
+			txLog.status = "FAILED: " + reason;
 			txLog.save();
 			errorHandler && errorHandler();
 			txSending.done = true;
@@ -87,3 +87,15 @@ async function writeTx(objMethod, errorHandler) {
 	// await waitFor(txSending);
 	return {status: "PENDING"};
 };
+
+async function getRevertReason(txHash){
+	var rtn = "";
+	const tx = await web3.eth.getTransaction(txHash);
+	try {
+		var result = await web3.eth.call(tx, tx.blockNumber);
+	} catch (error) {
+		rtn = error.toString().substr(73);
+	}
+	return rtn;
+ }
+ 

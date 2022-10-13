@@ -34,6 +34,7 @@
     "mysql2": "^2.1.0",
     "node-cron": "^3.0.2",
     "node-fetch": "^2.6.7",
+    "nodemailer": "^6.8.0",
     "rolia-util": "^1.0.2",
     "rootpath": "^0.1.2",
     "sequelize": "^6.3.4",
