@@ -5,6 +5,8 @@
 	callOptions,
 } = require("_helpers/bc");
 const { retrieve } = require("services/asset.service");
+const ui = require("_helpers/ui");
+const { waitFor } = require("rolia-util");
 
 module.exports = {
 	getAuthorizationsByOwner,
@@ -14,26 +16,23 @@ module.exports = {
 	retrieveAuthorized
 };
 
-// TODO: viewService.retrieveAuthorized
-
 async function getAuthorizationsByOwner(owner) {
-	const result = await contract.methods.getAuthorizationsByOwner(owner).call(callOptions);
-	// returns(Authorization[] _rtn) 
-	return result;
+	const authArr = await contract.methods.getAuthorizationsByOwner(owner).call(callOptions);
+	const authUiArr = await ui.getAuthorizationUiArray(authArr);
+	return authUiArr;
 }
+
 async function getAuthorizationsByViewer(viewer) {
-	const result = await contract.methods.getAuthorizationsByViewer(viewer).call(callOptions);
-	// returns(Authorization[] _rtn) 
-	return result;
+	const authArr = await contract.methods.getAuthorizationsByViewer(viewer).call(callOptions);
+	const authUiArr = await ui.getAuthorizationUiArray(authArr);
+	return authUiArr;
 }
 
 async function retrieveAuthorized(id, viewer) {
 	const result = await contract.methods.getAuthorizedAssetData(id, viewer).call(callOptions);
-	// returns(bytes _rtn) 
 	cid = web3.utils.hexToAscii(result);
 	return await retrieve(cid);
 }
-
 
 function createAuthorization(owner, viewer, bit, assetId) {
 	const objMethod = contract.methods.createAuthorization(owner, viewer, bit, assetId);

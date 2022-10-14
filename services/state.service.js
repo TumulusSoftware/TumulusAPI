@@ -4,6 +4,7 @@
 	contract,
 	callOptions,
 } = require("_helpers/bc");
+const {STATES} = require("_helpers/ui");
 
 module.exports = {
 	setThreshold,
@@ -21,7 +22,12 @@ function removeState(owner, bit) {
 }
 async function getStates(owner) {
 	const result = await contract.methods.getStates(owner).call(callOptions);
-	// returns(State[] _rtn) 
-	return result;
+	return result.map(obj => ({ 
+		bit: obj.bit,
+		threshold: obj.threshold,
+		announcementCount: obj.announcementCount,
+		active: obj.active,
+		state: STATES[obj.bit] 
+	}));
 }
 

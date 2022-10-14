@@ -45,7 +45,7 @@ async function processEvents(data) {
 			notify(owner, event, announcer);
 		}
 	} else if (event.startsWith("View")) {
-		data.returnValues.forEach(async auth => {
+		data.returnValues.authorizations.forEach(async auth => {
 			const addrOwner = auth.owner;
 			const addrViewer = auth.viewer;
 			const owner = await db.User.scope("emailOnly").findOne({ where: { walletAddress: addrOwner } });
@@ -65,13 +65,14 @@ function listenToEvents() {
 	const contract = new web3.eth.Contract(contractABI, contractAddress);
 	contract.events.allEvents()
 		.on('data', data => {
-			console.log("### listenToEvents, data:");
+			console.log(`### Event: ${data.event} ${JSON.stringify(data.returnValues)}`);
 			console.log(data);
 			processEvents(data);
 		})
 		.on('error', error => {
-			console.error("### listenToEvents, error:");
+			console.error("### Event error:");
 			console.error(error);
 		});
+	console.log("### listenToEvents() STARTED");	
 }
 

@@ -39,14 +39,14 @@ async function assign(req, res, next) {
 }
 
 function remove(req, res, next) {
-	const id = req.params.id;
+	const id = req.params.authId;
 	viewService.removeAuthorization(id, req.user.walletAddress)
 		.then((result) => res.json(result))
 		.catch(next);
 }
 
 function retrieve(req, res, next) {
-	const id = req.params.id;
+	const id = req.params.authId;
 	viewService.retrieveAuthorized(id, req.user.walletAddress)
 	.then(tuple => res.download(tuple.filePath, tuple.fileName))
 		.catch(next);

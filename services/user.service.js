@@ -2,6 +2,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('_helpers/db');
+const comm = require('_helpers/comm');
 const bc = require('_helpers/bc'); // bc=blockchain
 const {hybridEncryptHexKey} = require('tumulus-crypto');
 
@@ -16,9 +17,7 @@ module.exports = {
     verify,
     create,
     update,
-    delete: _delete,
-    getUserName,
-    getUserNameByWalletAddress
+    delete: _delete
 };
 
 async function getTransactionList(user) {
@@ -97,10 +96,13 @@ async function create(params) {
         params.hash = await bcrypt.hash(params.password, 10);
     }
 
-    params.vcode = '123456';
+    params.vcode = (Math.floor(100000 + Math.random() * 900000)).toString();
 
     // 2022-07-16
     const user = await db.User.create(params);
+
+    comm.sendVcode(user);
+
     const token = jwt.sign({ sub: user.id }, process.env.SECRET, { expiresIn: '7d' });
     return { ...omitHash(user.get()), token };
 }
@@ -142,16 +144,4 @@ async function getUser(id) {
 function omitHash(user) {
     const { hash, vcode, privateKey, ...userWithoutHash } = user;
     return userWithoutHash;
-}
-
-async function getUserName(id) {
-    const user = await db.User.findOne({ where: { id} });
-    // console.log("user info  = ", {id: user.id, name: user.firstName + " " + user.lastName});
-    return {id: user.id, name: user.firstName + " " + user.lastName};
-}
-
-async function getUserNameByWalletAddress(walletAddress) {
-    const user = await db.User.findOne({ where: { walletAddress} });
-    // console.log("user info  = ", {id: user.id, name: user.firstName + " " + user.lastName});
-    return {id: user.id, name: user.firstName + " " + user.lastName};
 }

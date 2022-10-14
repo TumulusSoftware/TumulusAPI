@@ -1,5 +1,12 @@
 const nodemailer = require('nodemailer');
 
+async function sendVcode(user) {
+	const to = user.emailAsId;
+	const subject = "Your verification code with Tumulus";
+	const text = `This message is for ${user.firstName} ${user.lastName}.  Please visit the website of Tumulus and use the code of: ${user.vcode}.`;
+	await email(to, subject, text);
+}
+
 async function notify(user, event, aboutUser) {
 	const to = user.emailAsId;
 	const subject = event;
@@ -33,6 +40,7 @@ async function email(to, subject, text) {
 }
 
 module.exports = {
-	notify
+	notify,
+	sendVcode
 };
  

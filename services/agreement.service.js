@@ -1,4 +1,5 @@
-﻿const {
+﻿const ui = require("_helpers/ui");
+const {
 	writeTx,
 	contract,
 	callOptions,
@@ -15,14 +16,14 @@ module.exports = {
 };
 
 async function getAgreementsByOwner(owner) {
-	const result = await contract.methods.getAgreementsByOwner(owner).call(callOptions);
-	// returns(Agreement[] _rtn) 
-	return result;
+	const agrmArr = await contract.methods.getAgreementsByOwner(owner).call(callOptions);
+	const agrmUiArr = await ui.getAgreementUiArray(agrmArr);
+	return agrmUiArr;
 }
 async function getAgreementsByAnnouncer(announcer) {
-	const result = await contract.methods.getAgreementsByAnnouncer(announcer).call(callOptions);
-	// returns(Agreement[] _rtn) 
-	return result;
+	const agrmArr = await contract.methods.getAgreementsByAnnouncer(announcer).call(callOptions);
+	const agrmUiArr = await ui.getAgreementUiArray(agrmArr);
+	return agrmUiArr;
 }
 
 function requestAgreement(owner, announcer, bit) {
