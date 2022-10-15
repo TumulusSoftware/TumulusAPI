@@ -40,24 +40,24 @@ async function authenticate({ emailAsId, password }) {
 }
 
 
+// async function getAll1() {
+//     // Upgrade:  migrate from using privateKey to safeKey 2022-08-23
+//     const salt = process.env.SALT;
+//     const tmlPublicKey = config.getTumulusPublicKey();
+//     const users =  await db.User.findAll();
+//     for (let user of users) {
+//         // console.log(user);
+//         if ( user.walletAddress == null && user.privateKey != null) {
+//             user.walletAddress = user.publicKey;
+//             user.safeKey = await hybridEncryptHexKey(user.privateKey, tmlPublicKey, salt);
+//             await user.save();
+//         }
+//         // console.log(user);
+//     }
+//     return users;
+// }
 async function getAll() {
-    // Upgrade:  migrate from using privateKey to safeKey 2022-08-23
-    const salt = process.env.SALT;
-    const tmlPublicKey = config.getTumulusPublicKey();
-    const users =  await db.User.findAll();
-    for (let user of users) {
-        // console.log(user);
-        if ( user.walletAddress == null && user.privateKey != null) {
-            user.walletAddress = user.publicKey;
-            user.safeKey = await hybridEncryptHexKey(user.privateKey, tmlPublicKey, salt);
-            await user.save();
-        }
-        // console.log(user);
-    }
-    return users;
-}
-async function getAll0() {
-    return await db.User.findAll();
+    return await db.User.scope("emailOnly").findAll();
 }
 
 async function getById(id) {

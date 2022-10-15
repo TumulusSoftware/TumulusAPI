@@ -1,86 +1,80 @@
-
-
 # Web service modules
 ```
 /asset/
 /agreement/
 /state/
-/viewer/
+/view/
 /user/    
 
 ```
 
 # Web service interface list
 ```
-		get    /asset/list
-		post   /asset/upload
-		get    /asset/:assetId
-post   /agreement/request
-delete /agreement/:agreId
-post   /agreement/agree
-post   /agreement/reject
-post   /agreement/announce
-get    /agreement/byOwner
-get    /agreement/byAnnouncer
-get    /state/list
-post   /state/:stateId
-delete /state/:stateId
-get    /view/byViewer
-post   /view/assign
-get    /view/list
-get    /view/:authId
-delete /view/:authId
-post   /user/authenticate    
-post   /user/register    
-post   /user/verify    
-get    /user/current    
-get    /user/:id    
-put    /user/:id    
+	post   /agreement/request
+	delete /agreement/:id
+	put    /agreement/agree
+	put    /agreement/reject
+	put    /agreement/announce
+	get    /agreement/byOwner
+	get    /agreement/byAnnouncer
+
+	post /asset/upload
+	get  /asset/list
+	get  /asset/:id
+
+	get    /state/list     
+	put    /state/threshold
+	delete /state/:bit     
+
+	post /user/authenticate
+	post /user/register    
+	post /user/verify      
+	get  /user/            
+	get  /user/current     
+	get  /user/:id         
+
+	post   /view/assign
+	get    /view/authorized
+	get    /view/list
+	delete /view/:authId
+	get    /view/:authId
+
+
 ```
 
-# Interface Spec
+# General Information
 
-## Upload asset
+## Authorization token
 
-Add or replace an asset by uploading a file.
+Excepts these two calls, 
 
-To add a new one, omit assetId or set it to 0.
-To update an existing asset, define the assetId.
+	post /user/authenticate
+	post /user/register    
 
-	post   /asset/upload
-
-Request:
+all other user calls require that the HTTP request is with a authorization header.
 
 	Authorization header: bearer token
-	Content-Type: multipart/form-data
-	Form Data:
-		assetId: (optional) <Integer>
-		assetFile: (binary)
-		tags: <String>
 
-Response:
+The token is from the response of the `authenticate` or `register` call.
 
-	{	"status":"OK|FAILED",
-		"message":"message|empty"}
+## Post body
 
+Excepts the asset file uploading, all other post calls use JSON format in their bodies.
 
+## Response of transactional call
 
-# Appendix: Existing web service interface as of Milestone 3
+If a call is to make change on the blockchain, the response is always as below:
 
-## asset
+	{
+		"status": "PENDING"
+	}
 
-get     /asset/list
-post    /asset/upload
-get     /asset/:id/:fileName
+The reason is that blockchain operaions are not immediate.  The wait time is not predictable.
 
-## users
+## Error
 
-post    /users/authenticate    
-post    /users/register    
-post    /users/verify    
-get     /users/allTx    
-get     /users/    
-get     /users/current    
-get     /users/:id    
-put     /users/:id    
-delete  /users/:id    
+Typical error response shall be like:
+
+	{
+		"message": "email or password is incorrect"
+	}
