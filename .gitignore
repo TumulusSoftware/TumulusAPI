@@ -105,3 +105,9 @@ dist
 /.vscode/*
 /package-lock.json
 /env/*
+
+.vs/config/applicationhost.config
+
+.vs/slnx.sqlite
+
+.vs/TumulusAPI/v15/.suo
