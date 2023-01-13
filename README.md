@@ -41,10 +41,12 @@ Edit `.env` and configure the necessary values
 ```https://github.com/TumulusSoftware/TumulusAPI.git```
 
 2. Create the API database
-	Setup a database using setup/api_schema.sql
+
+Setup a database using setup/api_schema.sql
 
 3. Rename the file .env.example to .env
-	Define the values in .env, following the comments inside the file.
+
+Define the values in .env, following the comments inside the file.
 
 3. Upload the API files to the server
 
