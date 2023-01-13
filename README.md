@@ -42,19 +42,18 @@ Edit `.env` and configure the necessary values
 
 2. Create the API database
 
-Setup a database using setup/api_schema.sql
+Setup a database using `setup/api_schema.sql`
 
 3. Rename the file .env.example to .env
 
-Define the values in .env, following the comments inside the file.
+4. Upload the API files to the server
 
-3. Upload the API files to the server
-
-4. Install the required packages on the server
+5. Install the required packages on the server
 
 ```npm update```
 
-5. Run the server
+6. Run the server
+
 ```npm start```
 
 The API is now available: http://yourhost/
