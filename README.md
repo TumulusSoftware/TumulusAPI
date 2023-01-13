@@ -38,7 +38,7 @@ Edit `.env` and configure the necessary values
 
 1. Clone the repo
 
-```https://github.com/TumulusSoftware/TumulusDemoApplication.git```
+```https://github.com/TumulusSoftware/TumulusAPI.git```
 
 2. Create the API database
 	Setup a database using setup/api_schema.sql
