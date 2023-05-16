@@ -6,18 +6,20 @@ The API provides endpoints for the following operations:
 * Create New Accounts
 * Verify New Accounts
 * Login
-* Upload Asset Files
-* Download Asset Files
+* Upload Asset File
+* Download Asset File
 * List Asset Files
 * List Agreements
-* Create & Request New Agreements
-* Delete Agreements
+* Request New Agreement
+* Agree on Agreement
+* Reject Agreement
+* Delete Agreement
 * List Authorizations
-* Assign Authorizations to Assets
-* Delete Authorizations
+* Assign Authorization to Asset
+* Delete Authorization
 * List Owner States
-* Update Owner State
-* Delete Owner State
+* Modify the threshold of Owner State change
+* Delete (Reset) Owner State
 
 __Note:__ _This is purely for demonstration purposes and should not be used as-is in production._
 
